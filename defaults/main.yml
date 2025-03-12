@@ -1,2 +1,4 @@
 ---
 # defaults file for vector-role
+
+vector_config_path: "/etc/vector/vector.yaml"

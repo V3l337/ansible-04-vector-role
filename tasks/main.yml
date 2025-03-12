@@ -8,19 +8,20 @@
     update_cache: yes
 
 - name: Install Vector
-  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSfL https://sh.vector.dev | bash -s -- -y
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSfL {{ vector_install_script }} | bash -s -- -y
 
 - name: Create Vector configuration directory
   ansible.builtin.file:
-    path: /etc/vector
+    path: "{{ vector_config_dir }}"
     state: directory
     mode: '0755'
 
 - name: Deploy Vector configuration
   ansible.builtin.template:
     src: vector_conf.j2
-    dest: /root/ansible/ansible-03/playbook/templates/vector_conf.j2
+    dest: "{{ vector_config_path }}"
     owner: root
     group: root
     mode: '0644'
   notify: Restart Vector service
+
