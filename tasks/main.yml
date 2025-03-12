@@ -1,0 +1,26 @@
+---
+# tasks file for vector-role
+
+- name: Install curl
+  ansible.builtin.apt:
+    name: curl
+    state: present
+    update_cache: yes
+
+- name: Install Vector
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSfL https://sh.vector.dev | bash -s -- -y
+
+- name: Create Vector configuration directory
+  ansible.builtin.file:
+    path: /etc/vector
+    state: directory
+    mode: '0755'
+
+- name: Deploy Vector configuration
+  ansible.builtin.template:
+    src: vector_conf.j2
+    dest: /root/ansible/ansible-03/playbook/templates/vector_conf.j2
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Vector service
